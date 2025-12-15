@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  webapp:
+    build: ./webapp
+    container_name: webapp_case5
+    ports:
+      - "9999:80"
+    volumes:
+      - ./webapp/src:/var/www/html
+    environment:
+      - WEB_DOCUMENT_ROOT=/var/www/html
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  db:
+    image: mysql:5.7
+    container_name: db_case5
+    environment:
+      MYSQL_DATABASE: 'guestbook_db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'rootpassword'
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:
